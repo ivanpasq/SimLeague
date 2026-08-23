@@ -8,14 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var league = League()
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Button("Simulate") {
+                league.simulateLeague()
+            }
+            
+            TableHeaderView()
+            
+            List(
+                league.standings(),
+                id: \.team.id
+            ) { row in
+                TableRowView(
+                    team: row.team,
+                    stats: row.stats,
+                    position: row.position
+                )
+            }
         }
-        .padding()
     }
 }
 
