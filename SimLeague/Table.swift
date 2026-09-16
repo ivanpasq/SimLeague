@@ -7,6 +7,12 @@
 
 import Foundation
 
+struct StandingRow: Equatable {
+    let position: Int
+    let team: Team
+    let stats: Stats
+}
+
 struct Table {
     var tableRows: [Team: Stats]
 
@@ -19,125 +25,37 @@ struct Table {
 
         tableRows = rows
     }
-}
-
-struct Stats {
-    var totalStats: StatsDetail = StatsDetail()
-    var homeStats: StatsDetail = StatsDetail()
-    var awayStats: StatsDetail = StatsDetail()
-
-    enum Outcome {
-        case win
-        case loss
-        case draw
-    }
-
-    mutating func recordStats(
-        playingHome: Bool,
-        matchOutcome: MatchOutcome,
-        goalsScored: Int,
-        goalsAgainst: Int
-    ) {
-        let statToRegister: Outcome
-        switch matchOutcome {
-        case .homeWin:
-            if playingHome {
-                statToRegister = .win
-            } else {
-                statToRegister = .loss
-            }
-        case .awayWin:
-            if playingHome {
-                statToRegister = .loss
-            } else {
-                statToRegister = .win
-            }
-        case .draw:
-            statToRegister = .draw
-        }
-
-        totalStats
-            .record(
-                statToRegister: statToRegister,
-                withGoalsScored: goalsScored,
-                withGoalsAgainst: goalsAgainst
+    
+    func standings() -> [StandingRow] {
+        tableRows
+            .sorted(
+                by: {
+                    if $0.value.totalStats.points != $1.value.totalStats.points
+                    {
+                        return $0.value.totalStats.points
+                        > $1.value.totalStats.points
+                    } else if $0.value.totalStats.goalsDifference
+                                != $1.value.totalStats.goalsDifference
+                    {
+                        return $0.value.totalStats.goalsDifference
+                        > $1.value.totalStats.goalsDifference
+                    } else if $0.value.totalStats.goalsScored
+                                != $1.value.totalStats.goalsScored
+                    {
+                        return $0.value.totalStats.goalsScored
+                        > $1.value.totalStats.goalsScored
+                    } else {
+                        return $0.key.name < $1.key.name
+                    }
+                }
             )
-
-        if playingHome {
-            homeStats
-                .record(
-                    statToRegister: statToRegister,
-                    withGoalsScored: goalsScored,
-                    withGoalsAgainst: goalsAgainst
+            .enumerated()
+            .map {
+                StandingRow(
+                    position: $0.offset + 1,
+                    team: $0.element.key,
+                    stats: $0.element.value
                 )
-        } else {
-            awayStats
-                .record(
-                    statToRegister: statToRegister,
-                    withGoalsScored: goalsScored,
-                    withGoalsAgainst: goalsAgainst
-                )
-        }
-    }
-}
-
-struct StatsDetail {
-    var points: Int = 0
-    var games: Int = 0
-    var wins: Int = 0
-    var draws: Int = 0
-    var defeats: Int = 0
-    var goalsScored: Int = 0
-    var goalsAgainst: Int = 0
-    var goalsDifference: Int { goalsScored - goalsAgainst }
-
-    mutating func record(
-        statToRegister: Stats.Outcome,
-        withGoalsScored goalsScored: Int,
-        withGoalsAgainst goalsAgainst: Int
-    ) {
-        switch statToRegister {
-        case .win:
-            registerWin(
-                withGoalsScored: goalsScored,
-                withGoalsAgainst: goalsAgainst
-            )
-        case .loss:
-            registerLose(
-                withGoalsScored: goalsScored,
-                withGoalsAgainst: goalsAgainst
-            )
-        case .draw:
-            registerDraw(withGoals: goalsScored)
-        }
-    }
-
-    mutating private func registerWin(
-        withGoalsScored goalsScored: Int,
-        withGoalsAgainst goalsAgainst: Int
-    ) {
-        points += 3
-        games += 1
-        wins += 1
-        self.goalsScored += goalsScored
-        self.goalsAgainst += goalsAgainst
-    }
-
-    mutating private func registerDraw(withGoals goalsNumber: Int) {
-        points += 1
-        games += 1
-        draws += 1
-        goalsScored += goalsNumber
-        goalsAgainst += goalsNumber
-    }
-
-    mutating private func registerLose(
-        withGoalsScored goalsScored: Int,
-        withGoalsAgainst goalsAgainst: Int
-    ) {
-        games += 1
-        defeats += 1
-        self.goalsScored += goalsScored
-        self.goalsAgainst += goalsAgainst
+            }
     }
 }

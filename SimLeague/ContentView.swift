@@ -19,7 +19,7 @@ struct ContentView: View {
             TableHeaderView()
             
             List(
-                league.standings(),
+                league.table.standings(),
                 id: \.team.id
             ) { row in
                 TableRowView(

@@ -7,12 +7,7 @@
 
 import Foundation
 
-struct StandingRow {
-    let position: Int
-    let team: Team
-    let stats: Stats
-}
-
+@MainActor
 @Observable
 class League {
     let teams: [Team]
@@ -71,39 +66,6 @@ class League {
             }
         }
     }
-
-    func standings() -> [StandingRow] {
-        table.tableRows
-            .sorted(
-                by: {
-                    if $0.value.totalStats.points != $1.value.totalStats.points
-                    {
-                        return $0.value.totalStats.points
-                            > $1.value.totalStats.points
-                    } else if $0.value.totalStats.goalsDifference
-                        != $1.value.totalStats.goalsDifference
-                    {
-                        return $0.value.totalStats.goalsDifference
-                            > $1.value.totalStats.goalsDifference
-                    } else if $0.value.totalStats.goalsScored
-                        != $1.value.totalStats.goalsScored
-                    {
-                        return $0.value.totalStats.goalsScored
-                            > $1.value.totalStats.goalsScored
-                    } else {
-                        return $0.key.name < $1.key.name
-                    }
-                }
-            )
-            .enumerated()
-            .map {
-                StandingRow(
-                    position: $0.offset + 1,
-                    team: $0.element.key,
-                    stats: $0.element.value
-                )
-            }
-    }
     
     func reset() {
         let table = Table(with: teams)
@@ -152,11 +114,6 @@ func generateSchedule(for teamList: [Team]) -> [[Match]] {
     for i in stride(from: 0, to: gameCount, by: 2) {
         schedule.swapAt(i, i + gameCount)
     }
-    
-    precondition(
-        checkGeneratedSchedule(of: schedule, for: teamList),
-        "Generated schedule for the league is NOT OK, check logs for details..."
-    )
     
     return schedule
 }
@@ -231,45 +188,4 @@ func calculateAverageStrength(
                 }
             ) / Double(teamList.count)
     }
-}
-
-func checkSimulatedLeague(league: League) -> Bool {
-    var checkResult = true
-    let finalTableRows = league.table.tableRows
-    let totalGoalsScored = finalTableRows.values.reduce(
-        0,
-        { sum, stats in sum + stats.totalStats.goalsScored }
-    )
-    let totalGoalsAgainst = finalTableRows.values.reduce(
-        0,
-        { sum, stats in sum + stats.totalStats.goalsAgainst }
-    )
-
-    if totalGoalsScored != totalGoalsAgainst {
-        print(
-            "Unexpected difference between total goals scored (\(totalGoalsScored)) and goals against (\(totalGoalsAgainst))"
-        )
-        checkResult = false
-    }
-
-    let totalPoints = finalTableRows.values.reduce(
-        0,
-        { sum, stats in sum + stats.totalStats.points }
-    )
-
-    if totalPoints < 760 || totalPoints > 1140 {
-        print("Unexpected point total: \(totalPoints)")
-        checkResult = false
-    }
-
-    for row in finalTableRows {
-        if row.value.totalStats.games != (league.teams.count - 1) * 2 {
-            print(
-                "Unexpected number of games for \(row.key.name): found \(row.value.totalStats.games) games instead of \((league.teams.count - 1) * 2)"
-            )
-            checkResult = false
-        }
-    }
-
-    return checkResult
 }

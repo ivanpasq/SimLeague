@@ -6,11 +6,27 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		2E5E8780303B02FD00F8D9D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E80ABB6303A024900566E48 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2E80ABBD303A024900566E48;
+			remoteInfo = SimLeague;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		2E5E877C303B02FD00F8D9D3 /* SimLeagueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimLeagueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E80ABBE303A024900566E48 /* SimLeague.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimLeague.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		2E5E877D303B02FD00F8D9D3 /* SimLeagueTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SimLeagueTests;
+			sourceTree = "<group>";
+		};
 		2E80ABC0303A024900566E48 /* SimLeague */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SimLeague;
@@ -19,6 +35,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2E5E8779303B02FD00F8D9D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2E80ABBB303A024900566E48 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				2E80ABC0303A024900566E48 /* SimLeague */,
+				2E5E877D303B02FD00F8D9D3 /* SimLeagueTests */,
 				2E80ABBF303A024900566E48 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				2E80ABBE303A024900566E48 /* SimLeague.app */,
+				2E5E877C303B02FD00F8D9D3 /* SimLeagueTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +73,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2E5E877B303B02FD00F8D9D3 /* SimLeagueTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2E5E8782303B02FD00F8D9D3 /* Build configuration list for PBXNativeTarget "SimLeagueTests" */;
+			buildPhases = (
+				2E5E8778303B02FD00F8D9D3 /* Sources */,
+				2E5E8779303B02FD00F8D9D3 /* Frameworks */,
+				2E5E877A303B02FD00F8D9D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2E5E8781303B02FD00F8D9D3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				2E5E877D303B02FD00F8D9D3 /* SimLeagueTests */,
+			);
+			name = SimLeagueTests;
+			packageProductDependencies = (
+			);
+			productName = SimLeagueTests;
+			productReference = 2E5E877C303B02FD00F8D9D3 /* SimLeagueTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		2E80ABBD303A024900566E48 /* SimLeague */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2E80ABC9303A024A00566E48 /* Build configuration list for PBXNativeTarget "SimLeague" */;
@@ -80,6 +128,10 @@
 				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
+					2E5E877B303B02FD00F8D9D3 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 2E80ABBD303A024900566E48;
+					};
 					2E80ABBD303A024900566E48 = {
 						CreatedOnToolsVersion = 26.6;
 					};
@@ -100,11 +152,19 @@
 			projectRoot = "";
 			targets = (
 				2E80ABBD303A024900566E48 /* SimLeague */,
+				2E5E877B303B02FD00F8D9D3 /* SimLeagueTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2E5E877A303B02FD00F8D9D3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2E80ABBC303A024900566E48 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +175,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2E5E8778303B02FD00F8D9D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2E80ABBA303A024900566E48 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +191,57 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		2E5E8781303B02FD00F8D9D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2E80ABBD303A024900566E48 /* SimLeague */;
+			targetProxy = 2E5E8780303B02FD00F8D9D3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		2E5E8783303B02FD00F8D9D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6V65ZVTW24;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.ivanpasquariello.SimLeagueTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimLeague.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SimLeague";
+			};
+			name = Debug;
+		};
+		2E5E8784303B02FD00F8D9D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6V65ZVTW24;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = it.ivanpasquariello.SimLeagueTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimLeague.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SimLeague";
+			};
+			name = Release;
+		};
 		2E80ABC7303A024A00566E48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -270,7 +387,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -302,7 +419,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -313,6 +430,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2E5E8782303B02FD00F8D9D3 /* Build configuration list for PBXNativeTarget "SimLeagueTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2E5E8783303B02FD00F8D9D3 /* Debug */,
+				2E5E8784303B02FD00F8D9D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2E80ABB9303A024900566E48 /* Build configuration list for PBXProject "SimLeague" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
