@@ -8,22 +8,27 @@
 import SwiftUI
 
 struct TableHeaderView: View {
+    var viewMode: TableViewMode
+    
     var body: some View {
-        HStack {
+        GridRow {
+            Text("Pos")
             Text("Name")
-            Text("MP")
-            Text("W")
-            Text("D")
-            Text("L")
-            Text("GF")
-            Text("GA")
-            Text("GD")
+            if viewMode == .standard {
+                Text("MP")
+                Text("W")
+                Text("D")
+                Text("L")
+                Text("GF")
+                Text("GA")
+                Text("GD")
+            }
             Text("Pts")
         }
-        .bold()
+        .fontWeight(.light)
     }
 }
 
 #Preview {
-    TableHeaderView()
+    TableHeaderView(viewMode: .standard)
 }
