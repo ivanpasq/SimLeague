@@ -10,46 +10,34 @@ import SwiftUI
 struct ContentView: View {
     @State private var league = League()
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-
-    private var currentTableViewMode: TableViewMode {
-        var mode: TableViewMode = .standard
-        if dynamicTypeSize >= .xxLarge {
-            mode = .large
-        }
-        if dynamicTypeSize >= .accessibility2 {
-            mode = .maxi
-        }
-        return mode
-    }
+    @State private var showDetails = false
 
     var body: some View {
-        let tableViewMode = currentTableViewMode
-
         VStack {
             Button("Simulate") {
                 league.simulateLeague()
             }
 
+            Toggle(isOn: $showDetails) {
+                Text("Show Details")
+            }
+
             ScrollView {
                 Grid {
-                    if tableViewMode != .maxi {
-                        TableHeaderView(
-                            viewMode: tableViewMode
-                        )
-                        
-                        Divider()
-                    }
+                    TableHeaderView(
+                        showDetails: showDetails
+                    )
 
                     ForEach(league.table.standings(), id: \.team.id) { row in
                         TableRowView(
                             team: row.team,
                             stats: row.stats,
                             position: row.position,
-                            viewMode: tableViewMode
+                            showDetails: showDetails
                         )
-                        Divider()
                     }
                 }
+                .padding(.vertical)
             }
         }
         .padding()
