@@ -16,18 +16,21 @@ class League {
     var homeAdvantage: Double
     var averageGoalsAmount: Double
 
+    var nextMatchDayIndex = 0
+    var isSeasonOver = false
+
     init(
         withHomeAdvantage homeAdvantage: Double = 1.20,
         withAvarageGoalsAmount avarageGoalsAmount: Double = 1.10
     ) {
         let teamList = loadDefaultTeams()
         let table = Table(with: teamList)
-        
+
         precondition(
             !teamList.isEmpty && teamList.count.isMultiple(of: 2),
             "Provided Team list is not valid"
         )
-        
+
         self.teams = teamList
         self.schedule = generateSchedule(for: teamList)
         self.table = table
@@ -36,54 +39,68 @@ class League {
     }
 
     func simulateLeague() {
-        reset()
+        precondition(self.isSeasonOver == false, "Season should not be over")
         
-        for i in schedule.indices {
-            for j in schedule[i].indices {
-                let matchResult = schedule[i][j].simulate(
-                    withHomeAdvantage: homeAdvantage,
-                    averageGoalsAmount: averageGoalsAmount
+        for i in self.nextMatchDayIndex..<schedule.count {
+            simulateNextMatchDay()
+        }
+        
+        self.isSeasonOver = true
+    }
+
+    func simulateNextMatchDay() {
+        precondition(self.isSeasonOver == false, "Season should not be over")
+        
+        for j in schedule[nextMatchDayIndex].indices {
+            let matchResult = schedule[nextMatchDayIndex][j].simulate(
+                withHomeAdvantage: homeAdvantage,
+                averageGoalsAmount: averageGoalsAmount
+            )
+            let simulatedMatch = schedule[nextMatchDayIndex][j]
+
+            table
+                .tableRows[simulatedMatch.homeTeam]?
+                .recordStats(
+                    playingHome: true,
+                    matchOutcome: matchResult.outcome,
+                    goalsScored: matchResult.homeTeamGoals,
+                    goalsAgainst: matchResult.awayTeamGoals
                 )
-                let simulatedMatch = schedule[i][j]
+            table
+                .tableRows[simulatedMatch.awayTeam]?
+                .recordStats(
+                    playingHome: false,
+                    matchOutcome: matchResult.outcome,
+                    goalsScored: matchResult.awayTeamGoals,
+                    goalsAgainst: matchResult.homeTeamGoals
+                )
+        }
 
-                table
-                    .tableRows[simulatedMatch.homeTeam]?
-                    .recordStats(
-                        playingHome: true,
-                        matchOutcome: matchResult.outcome,
-                        goalsScored: matchResult.homeTeamGoals,
-                        goalsAgainst: matchResult.awayTeamGoals
-                    )
-                table
-                    .tableRows[simulatedMatch.awayTeam]?
-                    .recordStats(
-                        playingHome: false,
-                        matchOutcome: matchResult.outcome,
-                        goalsScored: matchResult.awayTeamGoals,
-                        goalsAgainst: matchResult.homeTeamGoals
-                    )
-
-            }
+        self.nextMatchDayIndex += 1
+        if self.nextMatchDayIndex == self.schedule.count {
+            self.isSeasonOver = true
         }
     }
-    
+
     func reset() {
         let table = Table(with: teams)
         let schedule = generateSchedule(for: teams)
-        
+
         self.table = table
         self.schedule = schedule
+        self.nextMatchDayIndex = 0
+        self.isSeasonOver = false
     }
 }
 
 func generateSchedule(for teamList: [Team]) -> [[Match]] {
     var tempTeamsArray = teamList
     tempTeamsArray.shuffle()
-    
+
     let gameCount = teamList.count - 1
     var firstLegs: [[Match]] = []
     var secondLegs: [[Match]] = []
-    
+
     for _ in 0..<gameCount {
         var firstLegMatchDay: [Match] = []
         var returnLegMatchDay: [Match] = []
@@ -105,16 +122,16 @@ func generateSchedule(for teamList: [Team]) -> [[Match]] {
         }
         firstLegs.append(firstLegMatchDay)
         secondLegs.append(returnLegMatchDay)
-        
+
         tempTeamsArray.append(tempTeamsArray.remove(at: 1))
     }
-    
+
     var schedule = firstLegs + secondLegs
-    
+
     for i in stride(from: 0, to: gameCount, by: 2) {
         schedule.swapAt(i, i + gameCount)
     }
-    
+
     return schedule
 }
 
@@ -141,25 +158,30 @@ func loadDefaultTeams() -> [Team] {
         Team(name: "Frosinone", attack: 48, defense: 56),
         Team(name: "Monza", attack: 55, defense: 62),
     ]
-    
+
     let attackAverage = calculateAverageStrength(for: baseTeams, using: .attack)
-    let defenseAverage = calculateAverageStrength(for: baseTeams, using: .defense)
-    
+    let defenseAverage = calculateAverageStrength(
+        for: baseTeams,
+        using: .defense
+    )
+
     /// The factor used to spread team values to achieve more realistic results
     let k = 1.8
-    
+
     var teams: [Team] = []
-    
+
     for team in baseTeams {
         teams.append(
             team
                 .withStrength(
-                    offensive: attackAverage + k * (team.attack - attackAverage),
-                    defensive: defenseAverage + k * (team.defense - defenseAverage)
+                    offensive: attackAverage + k
+                        * (team.attack - attackAverage),
+                    defensive: defenseAverage + k
+                        * (team.defense - defenseAverage)
                 )
         )
     }
-    
+
     return teams
 }
 
@@ -173,19 +195,19 @@ func calculateAverageStrength(
     using baseField: AverageStrengthBaseField
 ) -> Double {
     switch baseField {
-        case .attack:
-            return teamList.reduce(
-                0.0,
-                { sumAttack, team in
-                    sumAttack + team.attack
-                }
-            ) / Double(teamList.count)
-        case .defense:
-            return teamList.reduce(
-                0.0,
-                { sumDefense, team in
-                    sumDefense + team.defense
-                }
-            ) / Double(teamList.count)
+    case .attack:
+        return teamList.reduce(
+            0.0,
+            { sumAttack, team in
+                sumAttack + team.attack
+            }
+        ) / Double(teamList.count)
+    case .defense:
+        return teamList.reduce(
+            0.0,
+            { sumDefense, team in
+                sumDefense + team.defense
+            }
+        ) / Double(teamList.count)
     }
 }

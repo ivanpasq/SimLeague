@@ -25,6 +25,7 @@ struct LeagueTests {
             0,
             { sum, stats in sum + stats.totalStats.goalsAgainst }
         )
+        let isSeasonOver = await league.isSeasonOver
 
         #expect(
             totalGoalsScored == totalGoalsAgainst,
@@ -47,5 +48,30 @@ struct LeagueTests {
                 "Team \(row.key.name) should have played \((leagueTeams.count - 1) * 2) games"
             )
         }
+
+        #expect(
+            isSeasonOver,
+            "After simulate the league, season should be over"
+        )
+    }
+
+    @Test func simulateMatchDayShouldSimOneMatchDay() async {
+        let league = await League()
+
+        let startingNextMatchDayIndex = await league.nextMatchDayIndex
+        await league.simulateNextMatchDay()
+        let newNextMatchDayIndex = await league.nextMatchDayIndex
+        let firstGameOfTheSeason = await league.schedule[
+            startingNextMatchDayIndex
+        ].first?.matchResult
+
+        #expect(
+            newNextMatchDayIndex - startingNextMatchDayIndex == 1,
+            "SimulateNextMatchDay should increment nextMatchDayIndex by one"
+        )
+        #expect(
+            firstGameOfTheSeason != nil,
+            "simulateNextMatchDay should have simmed the first match day"
+        )
     }
 }
