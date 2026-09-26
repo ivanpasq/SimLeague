@@ -25,7 +25,7 @@ struct Table {
 
         tableRows = rows
     }
-    
+
     func standings() -> [StandingRow] {
         tableRows
             .sorted(
@@ -33,17 +33,17 @@ struct Table {
                     if $0.value.totalStats.points != $1.value.totalStats.points
                     {
                         return $0.value.totalStats.points
-                        > $1.value.totalStats.points
+                            > $1.value.totalStats.points
                     } else if $0.value.totalStats.goalsDifference
-                                != $1.value.totalStats.goalsDifference
+                        != $1.value.totalStats.goalsDifference
                     {
                         return $0.value.totalStats.goalsDifference
-                        > $1.value.totalStats.goalsDifference
+                            > $1.value.totalStats.goalsDifference
                     } else if $0.value.totalStats.goalsScored
-                                != $1.value.totalStats.goalsScored
+                        != $1.value.totalStats.goalsScored
                     {
                         return $0.value.totalStats.goalsScored
-                        > $1.value.totalStats.goalsScored
+                            > $1.value.totalStats.goalsScored
                     } else {
                         return $0.key.name < $1.key.name
                     }
@@ -57,5 +57,10 @@ struct Table {
                     stats: $0.element.value
                 )
             }
+    }
+
+    func position(of team: Team) -> Int? {
+        standings().first(where: { standingRow in standingRow.team == team })?
+            .position
     }
 }

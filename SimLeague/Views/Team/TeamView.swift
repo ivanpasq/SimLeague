@@ -26,14 +26,10 @@ struct TeamView: View {
             }
 
             if let teamStats = league.table.tableRows[team] {
-                if let teamStanding = league.table.standings().first(
-                    where: { row in
-                        row.team == team
-                    })
-                {
+                if let teamPosition = league.table.position(of: team) {
                     LabeledContent(
                         "Position",
-                        value: String(teamStanding.position)
+                        value: String(teamPosition)
                     )
                     .bold()
                 }

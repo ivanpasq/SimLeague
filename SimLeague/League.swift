@@ -41,7 +41,7 @@ class League {
     func simulateLeague() {
         precondition(self.isSeasonOver == false, "Season should not be over")
         
-        for i in self.nextMatchDayIndex..<schedule.count {
+        for _ in self.nextMatchDayIndex..<schedule.count {
             simulateNextMatchDay()
         }
         

@@ -25,6 +25,15 @@ struct MatchDayView: View {
                     id: \.offset
                 ) { match in
                     GridRow {
+                        if let homeTeamPosition = league.table.position(
+                            of: match.element.homeTeam
+                        ) {
+                            Text(
+                                "(\(homeTeamPosition))"
+                            )
+                            .foregroundStyle(.secondary)
+                        }
+
                         NavigationLink(value: match.element.homeTeam) {
                             Text(match.element.homeTeam.name)
                         }
@@ -48,6 +57,15 @@ struct MatchDayView: View {
                         .buttonStyle(.plain)
                         .bold()
                         .padding(.horizontal)
+
+                        if let awayTeamPosition = league.table.position(
+                            of: match.element.awayTeam
+                        ) {
+                            Text(
+                                "(\(awayTeamPosition))"
+                            )
+                            .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }

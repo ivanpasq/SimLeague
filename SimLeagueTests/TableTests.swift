@@ -146,6 +146,26 @@ struct TableTests {
             "Table standing should adhere to ordering rules"
         )
 
+        let teamDPositionGot = table.position(of: teamD)
+        #expect(
+            teamDPositionGot == 5,
+            "position of teamD method return should be coherent with the table"
+        )
+
+    }
+
+    @Test func positionOfNotExistingTeamReturnsNil() throws {
+        let teamA = Team(name: "TeamA", attack: 80, defense: 80)
+        let teamB = Team(name: "TeamB", attack: 80, defense: 80)
+        
+        let table = Table(with: [
+            teamA
+        ])
+
+        #expect(
+            table.position(of: teamB) == nil,
+            "position of not existent team should be nil"
+        )
     }
 
 }
