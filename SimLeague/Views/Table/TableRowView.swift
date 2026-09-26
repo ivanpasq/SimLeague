@@ -16,9 +16,14 @@ struct TableRowView: View {
     var body: some View {
         GridRow {
             Text(String(position))
-            Text(team.name)
-                .gridColumnAlignment(.leading)
-                .bold()
+
+            NavigationLink(value: team) {
+                Text(team.name)
+                    .gridColumnAlignment(.leading)
+                    .bold()
+            }
+            .buttonStyle(.plain)
+
             Spacer()
             Text(String(stats.totalStats.games))
                 .font(.subheadline)
@@ -51,10 +56,15 @@ struct TableRowView: View {
         attack: 80,
         defense: 80
     )
-    TableRowView(
-        team: team,
-        stats: Stats(),
-        position: 1,
-        showDetails: true
-    )
+    
+    NavigationStack {
+        Grid {
+            TableRowView(
+                team: team,
+                stats: Stats(),
+                position: 1,
+                showDetails: true
+            )
+        }
+    }
 }

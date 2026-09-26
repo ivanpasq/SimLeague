@@ -55,6 +55,10 @@ struct MatchDayView: View {
     }
 }
 
+struct MatchDayDestination: Hashable {
+    let index: Int
+}
+
 #Preview {
     let previewLeague = League()
 

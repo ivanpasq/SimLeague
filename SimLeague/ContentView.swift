@@ -24,14 +24,14 @@ struct ContentView: View {
                     .buttonStyle(.glassProminent)
 
                     NavigationLink(
-                        "MatchDay",
-                        destination: MatchDayView(
-                            league: league,
-                            selectedMatchDay: league.isSeasonOver
+                        value: MatchDayDestination(
+                            index: league.isSeasonOver
                                 ? league.nextMatchDayIndex - 1
                                 : league.nextMatchDayIndex
                         )
-                    )
+                    ) {
+                        Text("Match Day")
+                    }
                     .buttonStyle(.glassProminent)
 
                     Button("Reset") {
@@ -66,6 +66,17 @@ struct ContentView: View {
                     }
                     .padding(.vertical)
                 }
+            }
+            .navigationDestination(
+                for: MatchDayDestination.self
+            ) { matchDay in
+                MatchDayView(
+                    league: league,
+                    selectedMatchDay: matchDay.index
+                )
+            }
+            .navigationDestination(for: Team.self) { team in
+                TeamView(team: team, league: league)
             }
         }
     }
