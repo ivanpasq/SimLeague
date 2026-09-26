@@ -25,8 +25,13 @@ struct MatchDayView: View {
                     id: \.offset
                 ) { match in
                     GridRow {
-                        Text(match.element.homeTeam.name)
-                            .padding(.horizontal)
+                        NavigationLink(value: match.element.homeTeam) {
+                            Text(match.element.homeTeam.name)
+                        }
+                        .buttonStyle(.plain)
+                        .bold()
+                        .padding(.horizontal)
+
                         if let matchResult = match.element.matchResult {
                             HStack {
                                 Text(String(matchResult.homeTeamGoals))
@@ -36,8 +41,13 @@ struct MatchDayView: View {
                         } else {
                             Text(" - ")
                         }
-                        Text(match.element.awayTeam.name)
-                            .padding(.horizontal)
+
+                        NavigationLink(value: match.element.awayTeam) {
+                            Text(match.element.awayTeam.name)
+                        }
+                        .buttonStyle(.plain)
+                        .bold()
+                        .padding(.horizontal)
                     }
                 }
             }
@@ -62,8 +72,10 @@ struct MatchDayDestination: Hashable {
 #Preview {
     let previewLeague = League()
 
-    MatchDayView(
-        league: previewLeague,
-        selectedMatchDay: previewLeague.nextMatchDayIndex
-    )
+    NavigationStack {
+        MatchDayView(
+            league: previewLeague,
+            selectedMatchDay: previewLeague.nextMatchDayIndex
+        )
+    }
 }
