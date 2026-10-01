@@ -125,7 +125,7 @@ struct ScheduleTests {
         }
 
         #expect(
-            schedule.matchDayList.count == (teamList.count - 1) * 2,
+            teamASchedule.count == (teamList.count - 1) * 2,
             "Total number of games, got \(schedule.matchDayList.count), expected \((teamList.count-1)*2)"
         )
     }
