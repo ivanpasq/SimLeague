@@ -14,7 +14,7 @@ struct ScheduleTests {
     @Test func generatedScheduleShouldAdhereToRules() async {
         let league = await League()
 
-        let generatedSchedule = await league.schedule
+        let generatedSchedule = await league.schedule.matchDayList
         let teams = await league.teams
 
         #expect(
@@ -67,6 +67,67 @@ struct ScheduleTests {
                 "Away matches per team \(team.name) should be \(teams.count - 1)"
             )
         }
+    }
+
+    @Test func scheduleForTeamShouldReturnMatchForGivenTeam() async throws {
+        let league = await League()
+
+        let teams = await league.teams
+
+        let testTeam = try #require(teams.first)
+
+        let teamSchedule = await league.schedule.matches(for: testTeam)
+
+        for schedule in teamSchedule {
+            #expect(
+                schedule.match.homeTeam == testTeam
+                    || schedule.match.awayTeam == testTeam,
+                "Tested team is not in the retrieved match"
+            )
+        }
+
+        #expect(
+            teamSchedule.count == (teams.count - 1) * 2,
+            "Team schedule: got \(teamSchedule.count), expected \((teams.count - 1) * 2) "
+        )
+    }
+
+    @Test func scheduleForTeamNotExistentShouldBeEmpty() async {
+        let league = await League()
+
+        let teamA = Team(name: "Test Not Existent", attack: 80, defense: 80)
+        let teamNotExistentSchedule = await league.schedule.matches(for: teamA)
+
+        #expect(
+            teamNotExistentSchedule.count == 0,
+            "Schedule for not existent team should be empty"
+        )
+    }
+
+    @Test func matchDayIndexInScheduleForMethodIsCoherent() async throws {
+        let teamA = Team(name: "TeamA", attack: 80, defense: 80)
+        let teamB = Team(name: "TeamB", attack: 80, defense: 80)
+        let teamC = Team(name: "TeamC", attack: 80, defense: 80)
+        let teamD = Team(name: "TeamD", attack: 80, defense: 80)
+
+        let teamList = [teamA, teamB, teamC, teamD]
+        let schedule = Schedule(for: teamList)
+
+        let teamASchedule = schedule.matches(for: teamA)
+        var matchDayIndexExpected = 0
+
+        for matchDay in teamASchedule {
+            #expect(
+                matchDay.matchDayIndex == matchDayIndexExpected,
+                "Match Day index, got \(matchDay.matchDayIndex), expected \(matchDayIndexExpected)"
+            )
+            matchDayIndexExpected += 1
+        }
+
+        #expect(
+            schedule.matchDayList.count == (teamList.count - 1) * 2,
+            "Total number of games, got \(schedule.matchDayList.count), expected \((teamList.count-1)*2)"
+        )
     }
 
 }

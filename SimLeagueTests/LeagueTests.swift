@@ -61,7 +61,7 @@ struct LeagueTests {
         let startingNextMatchDayIndex = await league.nextMatchDayIndex
         await league.simulateNextMatchDay()
         let newNextMatchDayIndex = await league.nextMatchDayIndex
-        let firstGameOfTheSeason = await league.schedule[
+        let firstGameOfTheSeason = await league.schedule.matchDayList[
             startingNextMatchDayIndex
         ].first?.matchResult
 

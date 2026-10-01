@@ -11,13 +11,13 @@ struct Stats: Equatable {
     var totalStats: StatsDetail = StatsDetail()
     var homeStats: StatsDetail = StatsDetail()
     var awayStats: StatsDetail = StatsDetail()
-    
+
     enum Outcome {
         case win
         case loss
         case draw
     }
-    
+
     mutating func recordStats(
         playingHome: Bool,
         matchOutcome: MatchOutcome,
@@ -26,29 +26,29 @@ struct Stats: Equatable {
     ) {
         let statToRegister: Outcome
         switch matchOutcome {
-            case .homeWin:
-                if playingHome {
-                    statToRegister = .win
-                } else {
-                    statToRegister = .loss
-                }
-            case .awayWin:
-                if playingHome {
-                    statToRegister = .loss
-                } else {
-                    statToRegister = .win
-                }
-            case .draw:
-                statToRegister = .draw
+        case .homeWin:
+            if playingHome {
+                statToRegister = .win
+            } else {
+                statToRegister = .loss
+            }
+        case .awayWin:
+            if playingHome {
+                statToRegister = .loss
+            } else {
+                statToRegister = .win
+            }
+        case .draw:
+            statToRegister = .draw
         }
-        
+
         totalStats
             .record(
                 statToRegister: statToRegister,
                 withGoalsScored: goalsScored,
                 withGoalsAgainst: goalsAgainst
             )
-        
+
         if playingHome {
             homeStats
                 .record(
@@ -76,28 +76,28 @@ struct StatsDetail: Equatable {
     var goalsScored: Int = 0
     var goalsAgainst: Int = 0
     var goalsDifference: Int { goalsScored - goalsAgainst }
-    
+
     mutating func record(
         statToRegister: Stats.Outcome,
         withGoalsScored goalsScored: Int,
         withGoalsAgainst goalsAgainst: Int
     ) {
         switch statToRegister {
-            case .win:
-                registerWin(
-                    withGoalsScored: goalsScored,
-                    withGoalsAgainst: goalsAgainst
-                )
-            case .loss:
-                registerLose(
-                    withGoalsScored: goalsScored,
-                    withGoalsAgainst: goalsAgainst
-                )
-            case .draw:
-                registerDraw(withGoals: goalsScored)
+        case .win:
+            registerWin(
+                withGoalsScored: goalsScored,
+                withGoalsAgainst: goalsAgainst
+            )
+        case .loss:
+            registerLose(
+                withGoalsScored: goalsScored,
+                withGoalsAgainst: goalsAgainst
+            )
+        case .draw:
+            registerDraw(withGoals: goalsScored)
         }
     }
-    
+
     mutating private func registerWin(
         withGoalsScored goalsScored: Int,
         withGoalsAgainst goalsAgainst: Int
@@ -108,7 +108,7 @@ struct StatsDetail: Equatable {
         self.goalsScored += goalsScored
         self.goalsAgainst += goalsAgainst
     }
-    
+
     mutating private func registerDraw(withGoals goalsNumber: Int) {
         points += 1
         games += 1
@@ -116,7 +116,7 @@ struct StatsDetail: Equatable {
         goalsScored += goalsNumber
         goalsAgainst += goalsNumber
     }
-    
+
     mutating private func registerLose(
         withGoalsScored goalsScored: Int,
         withGoalsAgainst goalsAgainst: Int

@@ -11,7 +11,7 @@ import Foundation
 @Observable
 class League {
     let teams: [Team]
-    var schedule: [[Match]]
+    var schedule: Schedule
     var table: Table
     var homeAdvantage: Double
     var averageGoalsAmount: Double
@@ -32,7 +32,7 @@ class League {
         )
 
         self.teams = teamList
-        self.schedule = generateSchedule(for: teamList)
+        self.schedule = Schedule(for: teamList)
         self.table = table
         self.homeAdvantage = homeAdvantage
         self.averageGoalsAmount = avarageGoalsAmount
@@ -40,23 +40,24 @@ class League {
 
     func simulateLeague() {
         precondition(self.isSeasonOver == false, "Season should not be over")
-        
-        for _ in self.nextMatchDayIndex..<schedule.count {
+
+        for _ in self.nextMatchDayIndex..<schedule.matchDayList.count {
             simulateNextMatchDay()
         }
-        
+
         self.isSeasonOver = true
     }
 
     func simulateNextMatchDay() {
         precondition(self.isSeasonOver == false, "Season should not be over")
-        
-        for j in schedule[nextMatchDayIndex].indices {
-            let matchResult = schedule[nextMatchDayIndex][j].simulate(
-                withHomeAdvantage: homeAdvantage,
-                averageGoalsAmount: averageGoalsAmount
-            )
-            let simulatedMatch = schedule[nextMatchDayIndex][j]
+
+        for j in schedule.matchDayList[nextMatchDayIndex].indices {
+            let matchResult = schedule.matchDayList[nextMatchDayIndex][j]
+                .simulate(
+                    withHomeAdvantage: homeAdvantage,
+                    averageGoalsAmount: averageGoalsAmount
+                )
+            let simulatedMatch = schedule.matchDayList[nextMatchDayIndex][j]
 
             table
                 .tableRows[simulatedMatch.homeTeam]?
@@ -77,62 +78,20 @@ class League {
         }
 
         self.nextMatchDayIndex += 1
-        if self.nextMatchDayIndex == self.schedule.count {
+        if self.nextMatchDayIndex == self.schedule.matchDayList.count {
             self.isSeasonOver = true
         }
     }
 
     func reset() {
         let table = Table(with: teams)
-        let schedule = generateSchedule(for: teams)
+        let schedule = Schedule(for: teams)
 
         self.table = table
         self.schedule = schedule
         self.nextMatchDayIndex = 0
         self.isSeasonOver = false
     }
-}
-
-func generateSchedule(for teamList: [Team]) -> [[Match]] {
-    var tempTeamsArray = teamList
-    tempTeamsArray.shuffle()
-
-    let gameCount = teamList.count - 1
-    var firstLegs: [[Match]] = []
-    var secondLegs: [[Match]] = []
-
-    for _ in 0..<gameCount {
-        var firstLegMatchDay: [Match] = []
-        var returnLegMatchDay: [Match] = []
-        for j in 0..<(teamList.count / 2) {
-            firstLegMatchDay
-                .append(
-                    Match(
-                        homeTeam: tempTeamsArray[j],
-                        awayTeam: tempTeamsArray[gameCount - j]
-                    )
-                )
-            returnLegMatchDay
-                .append(
-                    Match(
-                        homeTeam: tempTeamsArray[gameCount - j],
-                        awayTeam: tempTeamsArray[j]
-                    )
-                )
-        }
-        firstLegs.append(firstLegMatchDay)
-        secondLegs.append(returnLegMatchDay)
-
-        tempTeamsArray.append(tempTeamsArray.remove(at: 1))
-    }
-
-    var schedule = firstLegs + secondLegs
-
-    for i in stride(from: 0, to: gameCount, by: 2) {
-        schedule.swapAt(i, i + gameCount)
-    }
-
-    return schedule
 }
 
 func loadDefaultTeams() -> [Team] {

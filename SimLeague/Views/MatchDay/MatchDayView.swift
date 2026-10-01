@@ -14,14 +14,16 @@ struct MatchDayView: View {
     var body: some View {
         VStack {
             Picker("Match Day", selection: $selectedMatchDay) {
-                ForEach(league.schedule.indices, id: \.self) { i in
+                ForEach(league.schedule.matchDayList.indices, id: \.self) { i in
                     Text(String(i + 1))
                 }
             }
 
             Grid(verticalSpacing: 10) {
                 ForEach(
-                    league.schedule[selectedMatchDay].enumerated(),
+                    league.schedule
+                        .matchDayList[selectedMatchDay]
+                        .enumerated(),
                     id: \.offset
                 ) { match in
                     GridRow {
