@@ -81,29 +81,31 @@ struct TeamView: View {
                         Section(
                             "Match Day \(matchDay.matchDayIndex + 1)"
                         ) {
-                            let homeTeamName = matchDay.match.homeTeam
-                                .name
-                            let awayTeamName = matchDay.match.awayTeam
-                                .name
-                            if let matchResult = matchDay.match
-                                .matchResult
-                            {
+                            NavigationLink(
+                                value: MatchDayDestination(
+                                    index: matchDay.matchDayIndex
+                                )
+                            ) {
+                                let homeTeamName = matchDay.match.homeTeam
+                                    .name
+                                let awayTeamName = matchDay.match.awayTeam
+                                    .name
                                 HStack {
                                     Text(homeTeamName)
-                                    Text(String(matchResult.homeTeamGoals))
-                                    Text("-")
-                                    Text(String(matchResult.awayTeamGoals))
+                                    if let matchResult = matchDay.match
+                                        .matchResult
+                                    {
+                                        Text(String(matchResult.homeTeamGoals))
+                                        Text("-")
+                                        Text(String(matchResult.awayTeamGoals))
+                                    } else {
+                                        Text(" - ")
+                                    }
                                     Text(awayTeamName)
                                 }
-                            } else {
-                                HStack {
-                                    Text(homeTeamName)
-                                    Text(" - ")
-                                    Text(awayTeamName)
-                                }
+                                .frame(maxWidth: .infinity, alignment: .center)
                             }
                         }
-                        .frame(maxWidth: .infinity, alignment: .center)
                     }
                 }
             }
