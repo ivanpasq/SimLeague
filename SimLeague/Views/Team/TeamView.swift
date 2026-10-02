@@ -16,6 +16,8 @@ struct TeamView: View {
     let team: Team
     let league: League
 
+    let onSelectedMatchDay: (MatchDayDestination) -> Void
+
     @State private var detailSelection: TeamViewDetails = .stats
 
     var body: some View {
@@ -81,15 +83,18 @@ struct TeamView: View {
                         Section(
                             "Match Day \(matchDay.matchDayIndex + 1)"
                         ) {
-                            NavigationLink(
-                                value: MatchDayDestination(
-                                    index: matchDay.matchDayIndex
+                            let homeTeamName = matchDay.match.homeTeam
+                                .name
+                            let awayTeamName = matchDay.match.awayTeam
+                                .name
+
+                            Button {
+                                onSelectedMatchDay(
+                                    MatchDayDestination(
+                                        index: matchDay.matchDayIndex
+                                    )
                                 )
-                            ) {
-                                let homeTeamName = matchDay.match.homeTeam
-                                    .name
-                                let awayTeamName = matchDay.match.awayTeam
-                                    .name
+                            } label: {
                                 HStack {
                                     Text(homeTeamName)
                                     if let matchResult = matchDay.match
@@ -105,6 +110,7 @@ struct TeamView: View {
                                 }
                                 .frame(maxWidth: .infinity, alignment: .center)
                             }
+                            .foregroundStyle(.primary)
                         }
                     }
                 }
@@ -115,6 +121,7 @@ struct TeamView: View {
 }
 
 #Preview {
+    var navigationPath = NavigationPath()
     let previewLeague = League()
     let previewTeam =
         previewLeague.teams.first
@@ -124,7 +131,13 @@ struct TeamView: View {
             defense: 80
         )
 
-    NavigationStack {
-        TeamView(team: previewTeam, league: previewLeague)
+    NavigationStack() {
+        TeamView(
+            team: previewTeam,
+            league: previewLeague,
+            onSelectedMatchDay: { matchDay in
+                navigationPath.append(matchDay)
+            }
+        )
     }
 }

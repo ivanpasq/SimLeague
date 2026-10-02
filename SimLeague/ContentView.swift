@@ -10,9 +10,11 @@ import SwiftUI
 struct ContentView: View {
     @State private var league = League()
     @State private var showDetails = false
+    
+    @State private var path = NavigationPath()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             VStack {
                 HStack {
                     Spacer()
@@ -76,7 +78,13 @@ struct ContentView: View {
                 )
             }
             .navigationDestination(for: Team.self) { team in
-                TeamView(team: team, league: league)
+                TeamView(
+                    team: team,
+                    league: league,
+                    onSelectedMatchDay: { matchDay in
+                        path.append(matchDay)
+                    }
+                )
             }
         }
     }
